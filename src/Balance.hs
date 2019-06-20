@@ -8,12 +8,17 @@ balanceMatches = map balance
 balance :: [Matchup] -> [Matchup]
 balance ms = bal ms [] []
 
--- Kasataan uutta listaa matchupeista ja laitetaan kolmas sama joukkue
--- bufferiin jos sellaisia tulee. Bufferia yritetään tyhjentää joka iteraatiolla, 
--- jos se tarkoittaisi ettei tule kolme samaa putkeen.
+{-
 
--- Empiirisen tutkimuksen perusteella tämä ei jää ikuisesti jumiin,
--- mutta sitä ei ole todistettu.
+Build a new list of matchups, and if the same team appears three times in a
+row, add that matchup to buffer. At the beginning of each iteration, try to
+empty the buffer. If the result is not three games for the same team in a 
+row, add the first matchup in the buffer to the end of the matchup list.
+
+Based on empiric research, this algorithm doesn't seem to get stuck in an
+infinite loop. This has not been mathematically proven.
+
+-}
 
 bal :: [Matchup] -> [Matchup] -> [Matchup] -> [Matchup]
 bal (m:ms) (b:bs) r

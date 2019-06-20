@@ -21,12 +21,14 @@ main = do
     mapM_ uprint groups  
     
     putStrLn "\nmatches"
-    let schedule = getSchedule groups
+
+    printSchedule $ getSchedule groups
 
     -- aja testikoodi
-    --let schedule = test
+    -- printSchedule $ test
     
-    g schedule (map show (take (length schedule) [1,2..]))
+    
 
-f c xs  = putStrLn ("\n" ++ c ++ ":\n" ++ concat (intersperse "\n" $ map ushow xs))
+printSchedule s = g s (map show (take (length s) [1,2..])) 
 g xss cs = zipWithM_ f cs xss
+f c xs  = putStrLn ("\n" ++ c ++ ":\n" ++ concat (intersperse "\n" $ map ushow xs))
