@@ -16,26 +16,17 @@ main = do
     putStrLn ""
     let filtered = readTeams $ lines contents
     let groups = getGroups filtered (read (head args) :: Int)
-    -- putStrLn "all teams"        
-    -- (mapM_ putStrLn) filtered
+
     putStrLn "groups"
-    mapM_ print groups  
+    mapM_ uprint groups  
     
     putStrLn "\nmatches"
     let schedule = getSchedule groups
 
-    --let schedule = test 1
+    -- aja testikoodi
+    --let schedule = test
     
     g schedule (map show (take (length schedule) [1,2..]))
-
-
-
-
-    
-
-
-    -- mapM_ (mapM_ print) schedule
-    -- print $ getScheduleForGroup (head groups)
 
 f c xs  = putStrLn ("\n" ++ c ++ ":\n" ++ concat (intersperse "\n" $ map ushow xs))
 g xss cs = zipWithM_ f cs xss

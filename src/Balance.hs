@@ -3,26 +3,37 @@ module Balance (
 
 import Matchup
 
-balanceMatches = map (\single -> balance (single) [])
+balanceMatches = map balance
 
-balance :: [Matchup] -> [Matchup] -> [Matchup]
-balance (m:ms) new
-    | isBalanced (m:ms) = balance (ms) (new++[m])
-    | otherwise = balance (ms++[m]) (new)
-balance [] new = new
+balance :: [Matchup] -> [Matchup]
+balance ms = bal ms [] []
 
-isBalanced :: [Matchup] -> Bool
-isBalanced [] = True
-isBalanced ms 
-    | sameTeamOccurs ms 3 = False
-    | otherwise = isBalanced (tail ms)
+-- Kasataan uutta listaa matchupeista ja laitetaan kolmas sama joukkue
+-- bufferiin jos sellaisia tulee. Bufferia yritetään tyhjentää joka iteraatiolla, 
+-- jos se tarkoittaisi ettei tule kolme samaa putkeen.
+
+-- Empiirisen tutkimuksen perusteella tämä ei jää ikuisesti jumiin,
+-- mutta sitä ei ole todistettu.
+
+bal :: [Matchup] -> [Matchup] -> [Matchup] -> [Matchup]
+bal (m:ms) (b:bs) r
+    | not $ sameTeamOccurs (b:r) 3 = bal (m:ms) bs (b:r) 
+    | sameTeamOccurs (m:r) 3 = bal ms (b:bs) (m:r) 
+    | otherwise = bal ms (m:b:bs) r
+bal (m:ms) [] r 
+    | not $ sameTeamOccurs (m:r) 3 = bal ms [] (m:r) 
+    | otherwise = bal ms [m] r
+bal [] (b:bs) r 
+    | not $ sameTeamOccurs (b:r) 3 = bal [] bs (b:r)
+    | otherwise = bal (reverse (bs++r++[b])) [] []
+bal [] [] r = r
 
 sameTeamOccurs :: [Matchup] -> Int -> Bool
 sameTeamOccurs ms i = same (take i ms) i [] 
 
 same :: [Matchup] -> Int -> [String] -> Bool
-same [] i s = numIsMore s i s
 same (m:ms) i s = same ms i (home m:away m:s)
+same [] i s = numIsMore s i s
 
 numIsMore :: [String] -> Int -> [String] -> Bool
 numIsMore (m:ms) i orig
