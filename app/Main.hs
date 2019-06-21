@@ -18,17 +18,17 @@ main = do
     let groups = getGroups filtered (read (head args) :: Int)
 
     putStrLn "groups"
-    mapM_ uprint groups  
-    
+    mapM_ uprint groups
+
     putStrLn "\nmatches"
 
-    printSchedule $ getSchedule groups
+    printSchedule $ getSchedule groups 10
 
     -- aja testikoodi
-    -- printSchedule $ test
-    
-    
+    -- printSchedule test
+    --print $ show (length test)
 
-printSchedule s = g s (map show (take (length s) [1,2..])) 
+
+printSchedule s = g s (map show (take (length s) [1,2..]))
 g xss cs = zipWithM_ f cs xss
 f c xs  = putStrLn ("\n" ++ c ++ ":\n" ++ concat (intersperse "\n" $ map ushow xs))
