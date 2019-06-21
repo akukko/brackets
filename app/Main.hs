@@ -1,7 +1,8 @@
 module Main where
 
-import Brackets
 import ReadTeams
+import Groups
+import Schedule
 
 import System.Environment
 import Data.List

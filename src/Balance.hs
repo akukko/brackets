@@ -2,7 +2,6 @@ module Balance (
     balanceMatches) where
 
 import Matchup
-import Debug.Trace
 
 
 balanceMatches limit = map (\x -> 
@@ -74,6 +73,8 @@ sparse [] (b:bs) r
     | not $ sameTeamOccurs (b:r) 3 = sparse [] bs (b:r)
     | otherwise = sparse (reverse (bs++r++[b])) [] []
 sparse [] [] r = r
+
+
 
 sameTeamOccurs :: [Matchup] -> Int -> Bool
 sameTeamOccurs ms i = same (take i ms) i []
