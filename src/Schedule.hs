@@ -25,7 +25,7 @@ getScheduleRec (x:xs) a = getScheduleRec xs (createMatchups x xs [] ++ a)
 getScheduleRec [] a = a
 
 createMatchups :: String -> [String] -> [Matchup] -> [Matchup]
-createMatchups c (t:ts) a = createMatchups c ts (Matchup c t:a)
+createMatchups c (t:ts) a = createMatchups c ts (matchup c t:a)
 createMatchups c [] a = a
 
 
@@ -58,8 +58,6 @@ matches = map (map (\(h,a) -> Matchup (show h) (show a))) perms
 --testMatches = take 10000000000 (drop 12000000000 matches) -- testData7
 testMatches = take 10000000000 (drop 11000000000 matches) -- testData6
 --testMatches = matches -- testData5
-
-
 
 test :: [[Matchup]]
 --test = balanceMatches testMatches

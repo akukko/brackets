@@ -3,11 +3,15 @@ module Main where
 import ReadTeams
 import Groups
 import Schedule
+import Matchup
+import ReadResults
+import WriteSchedule
 
 import System.Environment
 import Data.List
 import Control.Monad
 import Text.Show.Unicode
+import System.IO
 
 
 main :: IO ()
@@ -23,7 +27,15 @@ main = do
 
     putStrLn "\nmatches"
 
-    printSchedule $ getSchedule groups 10
+    let schedule = getSchedule groups 10
+
+    -- printSchedule schedule
+    
+    --writeSchedule "schedule.txt" schedule
+
+    file <- readFile "schedule.txt"
+    
+    print $ readResults file
 
     -- aja testikoodi
     -- printSchedule test

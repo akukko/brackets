@@ -12,6 +12,7 @@ Returns a list of groups.
 Fills the groups evenly so that the number of groups is a power of two.
 
 -}
+
 getGroups :: [String] -> Int -> [[String]]
 getGroups s max = case groupAmount of
     Just amt -> splitToGroups s amt 0 []

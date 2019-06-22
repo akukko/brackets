@@ -1,13 +1,18 @@
 module Matchup (
     Matchup (..),
+    matchup,
     sameTeam,
     sameMatch) where
+
+import Data.Text
 
 data Matchup = Matchup {
     home :: String,
     away :: String
-} deriving (Show)
+} deriving (Show, Read)
 
+matchup :: String -> String -> Matchup
+matchup h a = Matchup (unpack (strip $ pack h)) (unpack (strip $ pack a))
 
 sameTeam :: Matchup -> Matchup -> Bool
 sameTeam x y
