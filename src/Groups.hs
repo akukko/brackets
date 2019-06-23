@@ -1,4 +1,5 @@
 module Groups (
+    calculateGroupAmount,
     getGroups) where
 
 import Matchup
