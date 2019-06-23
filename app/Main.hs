@@ -1,14 +1,16 @@
 module Main where
 
-import ReadTeams
 import Groups
 import Schedule
 import Matchup
+import Result
+import ReadTeams
 import ReadResults
-import WriteSchedule
+import Write
 
 import System.Environment
 import Data.List
+import Data.Ord
 import Control.Monad
 import Text.Show.Unicode
 import System.IO
@@ -16,44 +18,34 @@ import System.Random.Shuffle
 import Data.Maybe
 
 userData s = "userData/" ++ s ++ ".txt"
+scheduleFile = userData "schedule"
+teamsFile = userData "teams"
+maxTeamFile = userData "maxTeams"
 
 main :: IO ()
 main = do
     args <- getArgs
-    contents <- readFile (args!!1)
+    (groups, schedule) <- readInfo args
 
-    let teams = readTeams $ lines contents
-    putStrLn ""
-    let maxPerGroup = read (head args) :: Int
-    let groupAmount = calculateGroupAmount (length teams) maxPerGroup
-
-
-    shuffledTeams <- getShuffled teams (fromMaybe 0 groupAmount)
-    let groups = getGroups shuffledTeams maxPerGroup
-
-    putStrLn "groups"
-    mapM_ uprint groups
-
-    putStrLn "\nmatches"
-    let scheduleFile = userData "schedule"
-    let schedule = getSchedule groups 10
-
-    -- printSchedule schedule
-    writeSchedule scheduleFile schedule
-
+    let maxTeamNameLength = length (maximumBy (comparing length) (concat groups))
+    let pr = prettyResult maxTeamNameLength
     file <- readFile scheduleFile
 
-    printSchedule $ readResults file
-    print ""
+    let prettySchedule = groupedInfo (readResults file) pr
+    let prettyGroups = groupedInfoLabels groups "Group " id
+
+    putStrLn (concat (zipWith (\a b -> a ++ b ++ "\n") prettyGroups prettySchedule))
+
     -- aja testikoodi
     -- printSchedule test
     --print $ show (length test)
 
+groupedInfoLabels s gr = g s (map ((\x ->"\n"++gr++x++":\n"++concat (replicate 8 "=")++"\n\n") . show) (take (length s) [1,2..]))
+groupedInfo s = g s (replicate (length s) "\n\n")
+g xss cs fun = zipWith (f fun) xss cs
+f fun xs c = c ++ intercalate "\n" (map fun xs)
 
-printSchedule s = g s (map show (take (length s) [1,2..]))
-g xss cs = zipWithM_ f cs xss
-f c xs  = putStrLn ("\n" ++ c ++ ":\n" ++ concat (intersperse "\n" $ map ushow xs))
-
+getShuffled ts 0 = return ts
 getShuffled (t:ts) i = do
     let first = take i (t:ts)
     shuffled <- shuffleM first
@@ -61,4 +53,30 @@ getShuffled (t:ts) i = do
     return (shuffled ++ end)
 getShuffled [] i = return []
 
+readInfo args = do
+    let teamPath = if length args > 1 then args!!1 else teamsFile
 
+    let newGen = teamPath /= teamsFile
+
+    ts <- readFile teamPath
+    let teams = readTeams $ lines ts
+
+    max <- if newGen
+        then return (read (head args) :: Int)
+        else do
+            file <- readFile maxTeamFile
+            return (read file :: Int)
+
+    let groupAmount = fromMaybe 0 (calculateGroupAmount (length teams) max)
+
+    teams <- getShuffled teams groupAmount
+
+    let groups = getGroups teams groupAmount
+    let schedule = getSchedule groups 10
+
+    when newGen $ do
+        writeTeams teamsFile teams
+        writeSchedule scheduleFile schedule
+        writeMaxTeamAmount maxTeamFile max
+
+    return (groups, schedule)
