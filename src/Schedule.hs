@@ -1,9 +1,14 @@
 module Schedule (
     getSchedule,
-    test) where
+    test,
+    printableSchedule) where
+
 
 import Matchup
+import Result
 import Balance
+import Format
+
 import Data.List
 
 -- Takes a list of groups. 
@@ -27,6 +32,10 @@ getScheduleRec [] a = a
 createMatchups :: String -> [String] -> [Matchup] -> [Matchup]
 createMatchups c (t:ts) a = createMatchups c ts (matchup c t:a)
 createMatchups c [] a = a
+
+
+printableSchedule rs mt = groupedInfo rs (replicate (length rs) "\n\n") (prettyResult mt)
+
 
 
 

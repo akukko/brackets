@@ -1,4 +1,4 @@
-module ReadResults (
+module IO.ReadResults (
     readResults) where
 
 

@@ -3,6 +3,7 @@ module Groups (
     getGroups) where
 
 import Matchup
+
 import Data.List
 
 {- 

@@ -1,4 +1,4 @@
-module Write (
+module IO.Write (
     writeSchedule,
     writeTeams,
     writeMaxTeamAmount) where

@@ -4,9 +4,12 @@ import Groups
 import Schedule
 import Matchup
 import Result
-import ReadTeams
-import ReadResults
-import Write
+import Scoreboard
+
+import Format
+import IO.ReadTeams
+import IO.ReadResults
+import IO.Write
 
 import System.Environment
 import Data.List
@@ -26,24 +29,25 @@ main :: IO ()
 main = do
     args <- getArgs
     (groups, schedule) <- readInfo args
-
-    let maxTeamNameLength = length (maximumBy (comparing length) (concat groups))
-    let pr = prettyResult maxTeamNameLength
+    
+    let longestTeamName = length (maximumBy (comparing length) (concat groups))
     file <- readFile scheduleFile
-
-    let prettySchedule = groupedInfo (readResults file) pr
-    let prettyGroups = groupedInfoLabels groups "Group " id
-
-    putStrLn (concat (zipWith (\a b -> a ++ b ++ "\n") prettyGroups prettySchedule))
+    
+    let results = readResults file
+    let prettySchedule = printableSchedule results longestTeamName
+    
+    let scores = buildScoreboards results
+    let prettyScores = printableScoreboards longestTeamName scores
+    
+    let groupsTitles = map (\x -> "Group " ++ show x ++ "\n") (take (length scores) [1,2..])
+    putStrLn (concat $ combine "\n\n\n" (combine "" groupsTitles prettyScores) prettySchedule)
 
     -- aja testikoodi
     -- printSchedule test
     --print $ show (length test)
 
-groupedInfoLabels s gr = g s (map ((\x ->"\n"++gr++x++":\n"++concat (replicate 8 "=")++"\n\n") . show) (take (length s) [1,2..]))
-groupedInfo s = g s (replicate (length s) "\n\n")
-g xss cs fun = zipWith (f fun) xss cs
-f fun xs c = c ++ intercalate "\n" (map fun xs)
+
+
 
 getShuffled ts 0 = return ts
 getShuffled (t:ts) i = do

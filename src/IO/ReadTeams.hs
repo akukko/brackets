@@ -1,4 +1,4 @@
-module ReadTeams ( 
+module IO.ReadTeams ( 
     readTeams) where
 
 import System.IO

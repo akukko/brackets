@@ -1,8 +1,11 @@
 module Result (
     Result (..),
-    prettyResult) where
+    prettyResult,
+    Result.away,
+    Result.home) where
 
 import Matchup
+import Format
 
 import Data.Maybe
 
@@ -15,7 +18,6 @@ data Result = Result {
 
 home :: Result -> String
 home r = Matchup.home (match r)
-
 
 away :: Result -> String
 away r = Matchup.away (match r)
@@ -34,15 +36,5 @@ prettyResult pad r =
 padHome pad char result = padLeft pad char (Result.home result)  
 padAway pad char result = padRight pad char (Result.away result)
 
-
-padLeft :: Int -> Char -> String -> String
-padLeft i c s
-    | length s >= i = s
-    | otherwise = padLeft i c (c:s)
-
-padRight :: Int -> Char -> String -> String
-padRight i c s
-    | length s >= i = s
-    | otherwise = padRight i c (s++[c])
 
 scorePadAmount = 4
