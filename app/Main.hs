@@ -6,6 +6,7 @@ import Matchup
 import Result
 import Scoreboard
 
+import Brackets
 import Format
 import IO.ReadTeams
 import IO.ReadResults
@@ -25,25 +26,39 @@ userDataDir = "data/"
 userData s = userDataDir ++ s ++ ".txt"
 scheduleFile = userData "schedule"
 teamsFile = userData "teams"
-maxTeamFile = userData "maxTeams"
+configFile = userData "config"
 
 main :: IO ()
 main = do
+    putStrLn "\n\n\n"
     args <- getArgs
     (groups, schedule) <- readInfo args
-    
-    let longestTeamName = length (maximumBy (comparing length) (concat groups))
+
+    let longest = length (maximumBy (comparing length) (concat groups))
     file <- readFile scheduleFile
-    
+
     let results = readResults file
-    let prettySchedule = printableSchedule results longestTeamName
-    
+    let prettySchedule = printableSchedule results longest
+
     let scores = buildScoreboards results
-    let prettyScores = printableScoreboards longestTeamName scores
-    
+    let prettyScores = printableScoreboards longest scores
+
+
     let groupsTitles = map (\x -> "Group " ++ show x ++ "\n") (take (length scores) [1,2..])
     putStrLn (concat $ combine "\n\n\n" (combine "" groupsTitles prettyScores) prettySchedule)
 
+    let playoffTeams = getPlayoffTeams 2 scores
+    putStrLn "Playoff teams:"
+    putStrLn $ head $ printableScoreboards longest [playoffTeams]
+
+    {-
+    let numbers = map (\x -> show x ++ ": ") (take (length playoffTeams) [1,2..])
+    let long = 3 + length (maximumBy (comparing length) (map team playoffTeams))
+    let spt = map (prettyScore long) playoffTeams
+
+
+    putStrLn (intercalate "\n" $ combine "" numbers spt)
+    -}
     -- aja testikoodi
     -- printSchedule test
     --print $ show (length test)
@@ -70,7 +85,7 @@ readInfo args = do
     max <- if newGen
         then return (read (head args) :: Int)
         else do
-            file <- readFile maxTeamFile
+            file <- readFile configFile
             return (read file :: Int)
 
     let groupAmount = fromMaybe 0 (calculateGroupAmount (length teams) max)
@@ -84,6 +99,6 @@ readInfo args = do
         createDirectoryIfMissing False userDataDir
         writeTeams teamsFile teams
         writeSchedule scheduleFile schedule
-        writeMaxTeamAmount maxTeamFile max
+        writeMaxTeamAmount configFile max
 
     return (groups, schedule)
