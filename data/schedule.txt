@@ -1,0 +1,27 @@
+ 1,2 ,DDRNV PRO Generation, anaalivandaalittaret
+ 1, 3,DDRNV PRO Generation, DDRNV Lidls billiges Bier
+ 1,2 ,Sommar fisk, anaalivandaalittaret
+ 1,21 ,Sommar fisk, DDRNV Lidls billiges Bier
+ 12, -12 ,anaalivandaalittaret, DDRNV Lidls billiges Bier
+ -12 , 12 ,DDRNV PRO Generation, Sommar fisk
+
+ 12, 121 ,anaalivandaalit, DDRNV Mannschaftsgeist
+ 12 , 12,anaalivandaalit, Eliitti
+ 12 ,12 ,RAIDin enkelit, DDRNV Mannschaftsgeist
+ 12, 12,RAIDin enkelit, Eliitti
+ 12, 12,DDRNV Mannschaftsgeist, Eliitti
+ 12, 12,anaalivandaalit, RAIDin enkelit
+
+12 , 12,Homma, Disko_Lisko
+12 ,12 ,Bileinsinöörit, Disko_Lisko
+ -12, 12,Bileinsinöörit, Homma
+ 11, 12,Disko_Lisko, Homma
+ 11, -12 ,Disko_Lisko, Bileinsinöörit
+ -15, -51,Homma, Bileinsinöörit
+
+12 ,12 ,MOT, Skinnarilan Majavat
+ 12, 12,Kolme kuhaa, Skinnarilan Majavat
+ 12, 12,Kolme kuhaa, MOT
+ , ,Skinnarilan Majavat, MOT
+ , ,Skinnarilan Majavat, Kolme kuhaa
+ , ,MOT, Kolme kuhaa

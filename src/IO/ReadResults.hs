@@ -19,7 +19,7 @@ splitOnEmptyLine [] c r = r++[c]
 parse s = parseResult $ wordsWhen (==',') s
 
 parseResult :: [String] -> Result
-parseResult s = Result (matchup (s!!0) (s!!1)) (ri $ s!!2) (ri $ s!!3)
+parseResult s = Result (matchup (s!!2) (s!!3)) (ri $ s!!0) (ri $ s!!1)
 
 ri s 
     | not (null (dropWhile isSpace s)) = Just (read s :: Int)

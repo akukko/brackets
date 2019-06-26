@@ -18,9 +18,11 @@ import Control.Monad
 import Text.Show.Unicode
 import System.IO
 import System.Random.Shuffle
+import System.Directory
 import Data.Maybe
 
-userData s = "userData/" ++ s ++ ".txt"
+userDataDir = "data/"
+userData s = userDataDir ++ s ++ ".txt"
 scheduleFile = userData "schedule"
 teamsFile = userData "teams"
 maxTeamFile = userData "maxTeams"
@@ -79,6 +81,7 @@ readInfo args = do
     let schedule = getSchedule groups 10
 
     when newGen $ do
+        createDirectoryIfMissing False userDataDir
         writeTeams teamsFile teams
         writeSchedule scheduleFile schedule
         writeMaxTeamAmount maxTeamFile max
