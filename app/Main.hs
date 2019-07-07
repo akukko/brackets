@@ -28,10 +28,10 @@ import Debug.Trace
 
 userDataDir = "data/"
 userData s = userDataDir ++ s ++ ".txt"
-scheduleFile = userData "schedule"
+scheduleFile = userData "groupStage"
 teamsFile = userData "teams"
 configFile = userData "config"
-playoffFile = userData "playoffSchedule"
+playoffFile = userData "playoffs"
 
 main :: IO ()
 main = do
@@ -61,16 +61,18 @@ main = do
     
     playoffsExist <- doesFileExist playoffFile
 
+    let calculatedBrackets = getBrackets $ getFirstRound advance scores
+
     oldBrackets <- if playoffsExist
         then do
             playoffs <- readFile playoffFile
             evaluate (force playoffs)
-            return $ readResults playoffs
+            let results = readResults playoffs
+            if sameMatches (head results) (head calculatedBrackets)
+                then return $ results
+                else return calculatedBrackets
         else
-            return $ getBrackets $ getFirstRound advance scores
-    -- TODO: compare the getFirstRound result to the teams from the file
-    -- If they differ, rewrite the playoffschedule (too drastic?)
-    
+            return calculatedBrackets
 
     let brackets = updateBrackets oldBrackets
 
@@ -78,8 +80,6 @@ main = do
 
     let playoffGames = printableSchedule longest brackets
     putStrLn (intercalate "" playoffGames)
-
-
 
     {-
     let numbers = map (\x -> show x ++ ": ") (take (length playoffTeams) [1,2..])
@@ -133,3 +133,14 @@ readInfo args = do
         writeMaxTeamAmount configFile max
 
     return (groups, schedule)
+
+sameMatches :: [Result] -> [Result] -> Bool
+sameMatches (x:xs) (y:ys)
+    | sameMatch xm ym = sameMatches xs ys 
+    | otherwise = False
+    where 
+        xm = match x
+        ym = match y
+sameMatches [] [] = True
+sameMatches [] _ = False
+sameMatches _ [] = False
