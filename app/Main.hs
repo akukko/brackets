@@ -16,17 +16,22 @@ import System.Environment
 import Data.List
 import Data.Ord
 import Control.Monad
+import Control.Exception
+import Control.DeepSeq
 import Text.Show.Unicode
 import System.IO
 import System.Random.Shuffle
 import System.Directory
 import Data.Maybe
 
+import Debug.Trace
+
 userDataDir = "data/"
 userData s = userDataDir ++ s ++ ".txt"
 scheduleFile = userData "schedule"
 teamsFile = userData "teams"
 configFile = userData "config"
+playoffFile = userData "playoffSchedule"
 
 main :: IO ()
 main = do
@@ -35,10 +40,11 @@ main = do
     (groups, schedule) <- readInfo args
 
     let longest = length (maximumBy (comparing length) (concat groups))
-    file <- readFile scheduleFile
+
+    file <- readFile scheduleFile    
 
     let results = readResults file
-    let prettySchedule = printableSchedule results longest
+    let prettySchedule = printableSchedule longest results 
 
     let scores = buildScoreboards results
     let prettyScores = printableScoreboards longest scores
@@ -47,9 +53,33 @@ main = do
     let groupsTitles = map (\x -> "Group " ++ show x ++ "\n") (take (length scores) [1,2..])
     putStrLn (concat $ combine "\n\n\n" (combine "" groupsTitles prettyScores) prettySchedule)
 
-    let playoffTeams = getPlayoffTeams 2 scores
+
+    let advance = 2
+    let playoffTeams = getPlayoffTeams advance scores
     putStrLn "Playoff teams:"
     putStrLn $ head $ printableScoreboards longest [playoffTeams]
+    
+    playoffsExist <- doesFileExist playoffFile
+
+    oldBrackets <- if playoffsExist
+        then do
+            playoffs <- readFile playoffFile
+            evaluate (force playoffs)
+            return $ readResults playoffs
+        else
+            return $ getBrackets $ getFirstRound advance scores
+    -- TODO: compare the getFirstRound result to the teams from the file
+    -- If they differ, rewrite the playoffschedule (too drastic?)
+    
+
+    let brackets = updateBrackets oldBrackets
+
+    writeSchedule playoffFile brackets
+
+    let playoffGames = printableSchedule longest brackets
+    putStrLn (intercalate "" playoffGames)
+
+
 
     {-
     let numbers = map (\x -> show x ++ ": ") (take (length playoffTeams) [1,2..])
@@ -81,7 +111,8 @@ readInfo args = do
 
     ts <- readFile teamPath
     let teams = readTeams $ lines ts
-
+    evaluate (force teams)
+    
     max <- if newGen
         then return (read (head args) :: Int)
         else do

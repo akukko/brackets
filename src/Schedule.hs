@@ -13,8 +13,9 @@ import Data.List
 
 -- Takes a list of groups. 
 -- Returns a list of groups' matchups.
-getSchedule :: [[String]] -> Int -> [[Matchup]]
-getSchedule g limit = reverse $ balanceMatches limit $ recursive g []
+getSchedule :: [[String]] -> Int -> [[Result]]
+getSchedule g limit = map (map fromMatchup) matches
+    where matches = reverse $ balanceMatches limit $ recursive g []
 
 recursive :: [[String]] -> [[Matchup]] -> [[Matchup]]
 recursive (x:xs) a = recursive xs (getScheduleForGroup x:a)
@@ -30,11 +31,11 @@ getScheduleRec (x:xs) a = getScheduleRec xs (createMatchups x xs [] ++ a)
 getScheduleRec [] a = a
 
 createMatchups :: String -> [String] -> [Matchup] -> [Matchup]
-createMatchups c (t:ts) a = createMatchups c ts (matchup c t:a)
+createMatchups c (t:ts) a = createMatchups c ts (sanitizedMatchup c t:a)
 createMatchups c [] a = a
 
 
-printableSchedule rs mt = groupedInfo rs (replicate (length rs) "\n\n") (prettyResult mt)
+printableSchedule mt rs = groupedInfo rs (replicate (length rs) "\n\n") (prettyResult mt)
 
 
 

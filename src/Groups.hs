@@ -47,4 +47,4 @@ splitToGroups [] _ _ groups = groups
 
 insertItem xs i e = let (ys,zs) = splitAt i xs in ys ++ [(xs!!i)++[e]] ++ tail zs
 
-revFirst xs i = reverse (take i xs)++drop i xs
+revFirst xs i = reverse (take i xs) ++ drop i xs

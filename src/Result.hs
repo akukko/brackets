@@ -2,7 +2,10 @@ module Result (
     Result (..),
     prettyResult,
     Result.away,
-    Result.home) where
+    Result.home,
+    winner,
+    fromMatchup,
+    fromNames) where
 
 import Matchup
 import Format
@@ -16,15 +19,35 @@ data Result = Result {
     awayScore :: Maybe Int
 } deriving (Show)
 
+fromNames t b = Result (Matchup t b) Nothing Nothing
+fromMatchup m = Result m Nothing Nothing
+
 home :: Result -> String
 home r = Matchup.home (match r)
 
 away :: Result -> String
 away r = Matchup.away (match r)
 
+winner :: Result -> Maybe String
+winner r
+    | valid = findWinner r
+    | otherwise = Nothing
+    where 
+        valid = isJust (homeScore r) && isJust (awayScore r)
+
+-- This function assumes that both the results are not Nothing
+findWinner :: Result -> Maybe String 
+findWinner r
+    | dif == GT = Just (Result.home r)
+    | dif == LT = Just (Result.away r)
+    | otherwise = Nothing
+    where 
+        dif = compare (fromJust $ homeScore r) (fromJust $ awayScore r)
+
+
 prettyResult :: Int -> Result -> String
 prettyResult pad r = 
-    padHome pad ' ' r ++ "  " ++ hs ++ " - " ++ as ++ "  " ++ padAway pad ' ' r 
+    padHome pad ' ' r ++ "  " ++ hs ++ "  - " ++ as ++ "  " ++ padAway pad ' ' r 
     where 
         hs = case homeScore r of
             Just score -> padLeft scorePadAmount ' ' (show score)

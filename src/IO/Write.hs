@@ -3,14 +3,24 @@ module IO.Write (
     writeTeams,
     writeMaxTeamAmount) where
 
-import Matchup
+import Result
 
 import Data.List
 
-writeSchedule :: String -> [[Matchup]] -> IO ()
-writeSchedule path ms = writeFile path (intercalate "\n" (map (writeGroup "") ms))
+writeSchedule :: String -> [[Result]] -> IO ()
+writeSchedule path rs = writeFile path (intercalate "\n" (map (writeGroup "") rs))
 
-writeGroup = foldl (\r m -> r ++ (" , ," ++ home m ++ ", " ++ away m ++ "\n"))
+writeGroup :: String -> [Result] -> String
+writeGroup = foldl buildLine
+
+buildLine cur r = cur ++ (scoreH ++ "," ++ scoreA ++ "," ++ home r ++ ", " ++ away r ++ "\n")
+    where 
+        scoreH = getScore (homeScore r)
+        scoreA = getScore (awayScore r)
+
+getScore s = case s of 
+    Just i -> show i
+    Nothing -> ""
 
 writeTeams :: String -> [String] -> IO ()
 writeTeams path ts = writeFile path (intercalate "\n" ts)
