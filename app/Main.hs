@@ -81,20 +81,6 @@ main = do
     let playoffGames = printableSchedule longest brackets
     putStrLn (intercalate "" playoffGames)
 
-    {-
-    let numbers = map (\x -> show x ++ ": ") (take (length playoffTeams) [1,2..])
-    let long = 3 + length (maximumBy (comparing length) (map team playoffTeams))
-    let spt = map (prettyScore long) playoffTeams
-
-
-    putStrLn (intercalate "\n" $ combine "" numbers spt)
-    -}
-    -- aja testikoodi
-    -- printSchedule test
-    --print $ show (length test)
-
-
-
 
 getShuffled ts 0 = return ts
 getShuffled (t:ts) i = do
@@ -133,14 +119,3 @@ readInfo args = do
         writeMaxTeamAmount configFile max
 
     return (groups, schedule)
-
-sameMatches :: [Result] -> [Result] -> Bool
-sameMatches (x:xs) (y:ys)
-    | sameMatch xm ym = sameMatches xs ys 
-    | otherwise = False
-    where 
-        xm = match x
-        ym = match y
-sameMatches [] [] = True
-sameMatches [] _ = False
-sameMatches _ [] = False

@@ -5,7 +5,8 @@ module Result (
     Result.home,
     winner,
     fromMatchup,
-    fromNames) where
+    fromNames,
+    sameMatches) where
 
 import Matchup
 import Format
@@ -61,3 +62,15 @@ padAway pad char result = padRight pad char (Result.away result)
 
 
 scorePadAmount = 4
+
+
+sameMatches :: [Result] -> [Result] -> Bool
+sameMatches (x:xs) (y:ys)
+    | sameMatch xm ym = sameMatches xs ys 
+    | otherwise = False
+    where 
+        xm = match x
+        ym = match y
+sameMatches [] [] = True
+sameMatches [] _ = False
+sameMatches _ [] = False

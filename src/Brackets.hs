@@ -20,7 +20,11 @@ import Debug.Trace
 getPlayoffTeams :: Int -> [[TeamScore]] -> [TeamScore]
 getPlayoffTeams i ts = sortBy betterAverage (concatMap (take i) ts)
 
-betterAverage ts1 ts2 = compare (averageScore ts2) (averageScore ts1)
+betterAverage ts1 ts2
+    | avg /= EQ = avg
+    | otherwise = compare (bestGame ts2) (bestGame ts1)
+    where 
+        avg = compare (averageScore ts2) (averageScore ts1)
 
 getFirstRound :: Int -> [[TeamScore]] -> [Result]
 getFirstRound i ts = buildBrackets $ map team $ getPlayoffTeams i ts
