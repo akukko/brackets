@@ -1,27 +1,27 @@
- -23,-50 ,DDRNV PRO Generation, anaalivandaalittaret
- -20, -65,DDRNV PRO Generation, DDRNV Lidls billiges Bier
- -30, -40 ,Sommar fisk, anaalivandaalittaret
- -27, -49 ,Sommar fisk, DDRNV Lidls billiges Bier
- -45, -59 ,anaalivandaalittaret, DDRNV Lidls billiges Bier
- -18 , -29 ,DDRNV PRO Generation, Sommar fisk
+-5,-41,Disko_Lisko, Bileinsinöörit
+-10,-60,Disko_Lisko, Eliitti
+-30,-45,Sommar fisk, Bileinsinöörit
+-39,-70,Sommar fisk, Eliitti
+-41,-60,Bileinsinöörit, Eliitti
+-15,-20,Disko_Lisko, Sommar fisk
 
- -4, -68 ,anaalivandaalit, DDRNV Mannschaftsgeist
- -8 , -90,anaalivandaalit, Eliitti
- -30 ,-70 ,RAIDin enkelit, DDRNV Mannschaftsgeist
- -35, -60,RAIDin enkelit, Eliitti
- -58, -67,DDRNV Mannschaftsgeist, Eliitti
- -2, -27,anaalivandaalit, RAIDin enkelit
+-5,-45,Skinnarilan Majavat, anaalivandaalittaret
+-1,-60,Skinnarilan Majavat, Kolme kuhaa
+-40,-56,Homma, anaalivandaalittaret
+-40,-70,Homma, Kolme kuhaa
+-56,-67,anaalivandaalittaret, Kolme kuhaa
+1,-40,Skinnarilan Majavat, Homma
 
--40 , -20,Homma, Disko_Lisko
--41 ,-17 ,Bileinsinöörit, Disko_Lisko
- -37, -45,Bileinsinöörit, Homma
- -15, -47,Disko_Lisko, Homma
- -19, -38,Disko_Lisko, Bileinsinöörit
- -52, -51,Homma, Bileinsinöörit
+-40,-20,MOT, DDRNV PRO Generation
+-50,-15,DDRNV Mannschaftsgeist, DDRNV PRO Generation
+-60,-45,DDRNV Mannschaftsgeist, MOT
+-10,-40,DDRNV PRO Generation, MOT
+-13,-60,DDRNV PRO Generation, DDRNV Mannschaftsgeist
+-35,-60,MOT, DDRNV Mannschaftsgeist
 
--31 ,-13 ,MOT, Skinnarilan Majavat
- -70, -11,Kolme kuhaa, Skinnarilan Majavat
- -78, -35,Kolme kuhaa, MOT
- -8, -29,Skinnarilan Majavat, MOT
- -7, -86,Skinnarilan Majavat, Kolme kuhaa
- -27, -78,MOT, Kolme kuhaa
+-35,-4,RAIDin enkelit, anaalivandaalit
+-60,-2,DDRNV Lidls billiges Bier, anaalivandaalit
+-58,-38,DDRNV Lidls billiges Bier, RAIDin enkelit
+-2,-28,anaalivandaalit, RAIDin enkelit
+2,-58,anaalivandaalit, DDRNV Lidls billiges Bier
+-38,-67,RAIDin enkelit, DDRNV Lidls billiges Bier

@@ -1,9 +1,9 @@
-,,anaalivandaalit, Bileinsinöörit
-,,Skinnarilan Majavat, RAIDin enkelit
-,,Disko_Lisko, MOT
-,,DDRNV PRO Generation, Sommar fisk
+2,-45,anaalivandaalit, Homma
+-2,-35,Skinnarilan Majavat, MOT
+-15,-25,Disko_Lisko, RAIDin enkelit
+-16,-34,DDRNV PRO Generation, Sommar fisk
 
-,,TBA, TBA
-,,TBA, TBA
+-2,-15,anaalivandaalit, DDRNV PRO Generation
+-2,-3,Skinnarilan Majavat, Disko_Lisko
 
-,,TBA, TBA
+,,anaalivandaalit, Skinnarilan Majavat
