@@ -116,10 +116,10 @@ readInfo args = do
             return (read file :: Int)
 
     let groupAmount = fromMaybe 0 (calculateGroupAmount (length teams) max)
-
+        
     teams <- getShuffled teams groupAmount
 
-    let groups = getGroups teams groupAmount
+    let groups = getGroups teams max
     let schedule = getSchedule groups 10
 
     when newGen $ do

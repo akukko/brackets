@@ -5,6 +5,7 @@ module Groups (
 import Matchup
 
 import Data.List
+import Debug.Trace
 
 {- 
 
@@ -32,6 +33,16 @@ calculateGroupAmount teams maxPerGroup
     where
         (amount, reminder) = quotRem teams maxPerGroup
 
+{-
+-- The idea of this function is that the teams are split into groups
+-- based on their seeding. So with 16 teams, the teams should be:
+
+Group 1:    1 8  9 16
+Group 2:    2 7 10 15
+Group 3:    3 6 11 14
+Group 4:    4 5 12 13
+
+-}
 -- this could probably be done in a prettier way
 splitToGroups :: [String] -> Int -> Int -> [[String]] -> [[String]]
 splitToGroups (x:xs) amt cur groups
@@ -40,11 +51,11 @@ splitToGroups (x:xs) amt cur groups
     | cur == amt - 1 && modTwo = splitToGroups xs amt 0 newList
     | cur == amt - 1 = splitToGroups (revFirst xs amt) amt 0 newList
     | otherwise = splitToGroups xs amt (cur + 1) newList
-        where
-            newList = insertItem groups cur x
-            modTwo = mod (length (head groups)) 2 == 0
+    where
+        newList = insertItem groups cur x
+        modTwo = mod (length (head groups)) 2 == 0
 splitToGroups [] _ _ groups = groups
-
+    
 insertItem xs i e = let (ys,zs) = splitAt i xs in ys ++ [(xs!!i)++[e]] ++ tail zs
 
 revFirst xs i = reverse (take i xs) ++ drop i xs
