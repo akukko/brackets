@@ -46,7 +46,7 @@ buildScoreForTeam team (Just s) (Just old) p =
 
 buildScoreForTeam team (Just s) Nothing p = TeamScore team 1 p s (fromIntegral s) s
 buildScoreForTeam _ Nothing (Just old) _ = old
-buildScoreForTeam team Nothing Nothing _ = TeamScore team 0 0 0 0 0
+buildScoreForTeam team Nothing Nothing _ = TeamScore team 0 0 0 (-160) (-160)
 
 
 printableScoreboards :: Int -> [[TeamScore]] -> [String]
