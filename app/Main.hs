@@ -35,24 +35,22 @@ playoffFile = userData "playoffs"
 
 main :: IO ()
 main = do
-    putStrLn "\n\n\n"
-    args <- getArgs
-    (groups, schedule) <- readInfo args
+    maybeGenerateNew
 
-    let longest = length (maximumBy (comparing length) (concat groups))
+    putStrLn "\n\n\n"
 
     file <- readFile scheduleFile
-
+    
     let results = readResults file
-    let prettySchedule = printableSchedule longest results
-
     let scores = buildScoreboards results
+    
+    let longest = length (maximumBy (comparing length) (map team $ concat scores))
+    
+    let prettySchedule = printableSchedule longest results
     let prettyScores = printableScoreboards longest scores
-
 
     let groupsTitles = map (\x -> "Group " ++ show x ++ "\n") (take (length scores) [1,2..])
     putStrLn (concat $ combine "\n\n\n" (combine "" groupsTitles prettyScores) prettySchedule)
-
 
     let advance = 2
     let playoffTeams = getPlayoffTeams advance scores
@@ -69,7 +67,7 @@ main = do
             evaluate (force playoffs)
             let results = readResults playoffs
             if sameMatches (head results) (head calculatedBrackets)
-                then return $ results
+                then return results
                 else return calculatedBrackets
         else
             return calculatedBrackets
@@ -84,7 +82,7 @@ main = do
     let teamAmounts = take (length brackets) (tail $ iterate (*2) 1)
     let playoffStages = map (\x -> "Round of " ++ show x) teamAmounts
     let withLine = map (\s -> s ++ "\n" ++ replicate (length s) '=') (addFinalNames playoffStages)
-    
+
 
     let playoffGames = printableSchedule longest brackets
     putStrLn (intercalate "\n\n" $ combine "" withLine playoffGames)
@@ -100,35 +98,29 @@ getShuffled (t:ts) i = do
     return (shuffled ++ end)
 getShuffled [] i = return []
 
-readInfo args = do
-    let teamPath = if length args > 1 then args!!1 else teamsFile
 
-    let newGen = teamPath /= teamsFile
-
-    ts <- readFile teamPath
-    let teams = readTeams $ lines ts
-    evaluate (force teams)
-
-    max <- if newGen
-        then return (read (head args) :: Int)
-        else do
-            file <- readFile configFile
-            return (read file :: Int)
-
-    let groupAmount = fromMaybe 0 (calculateGroupAmount (length teams) max)
-        
-    teams <- getShuffled teams groupAmount
-
-    let groups = getGroups teams max
-    let schedule = getSchedule groups 10
-
+maybeGenerateNew = do
+    args <- getArgs
+    let newGen = length args > 1
+    
     when newGen $ do
+        let teamPath = args!!1
+        ts <- readFile teamPath
+        let teams = readTeams $ lines ts
+        evaluate (force teams)
+
+        let max = read (head args) :: Int
+        let groupAmount = fromMaybe 0 (calculateGroupAmount (length teams) max)
+        
+        teams <- getShuffled teams groupAmount
+
+        let groups = getGroups teams max
+        let schedule = getSchedule groups 10 -- limit is 10 matches
+
         createDirectoryIfMissing False userDataDir
         writeTeams teamsFile teams
         writeSchedule scheduleFile schedule
         writeMaxTeamAmount configFile max
-
-    return (groups, schedule)
 
 addFinalNames stages
     | l > 2 = reverse $ f:sf:qf:drop 3 stages
