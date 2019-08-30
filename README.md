@@ -33,3 +33,42 @@
 
 - Once the program has been run once, it will generate the necessary save files, so next time you run the program, it's enough to run it without any parameters. 
     - Running it without parameters will output the current information in the save files.
+
+## Example output
+
+Group output
+
+```
+Group 1
+==================================================================
+|    | Team                    | Games | Points | Average | Best |
+==================================================================
+|  1 | AiM                     |     3 |      6 |   -2.00 |    1 |
+|  2 | Suppohauet              |     3 |      4 |    1.00 |    3 |
+|  3 | DDR:n Naisvoimistelijat |     3 |      2 |   -5.00 |   -2 |
+|  4 | Skepparklubben          |     3 |      0 |   -6.00 |   -4 |
+==================================================================
+
+         Skepparklubben    -8  -   -2  AiM                    
+         Skepparklubben    -6  -    2  Suppohauet             
+DDR:n Naisvoimistelijat   -10  -   -5  AiM                    
+DDR:n Naisvoimistelijat    -2  -    3  Suppohauet             
+                    AiM     1  -   -2  Suppohauet             
+         Skepparklubben    -4  -   -3  DDR:n Naisvoimistelijat
+
+```
+
+Playoffs output
+
+```
+Semifinals
+==========
+
+             Suppohauet        -       MOT                    
+                    AiM        -       Disko_Lisko            
+
+Final
+=====
+
+                    TBA        -       TBA            
+```
